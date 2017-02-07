@@ -1,0 +1,40 @@
+<section>
+<h3>Properties</h3>
+<?php
+$id = $Instance->ID;
+$class = $Meta->ClassName;
+
+foreach ($Meta->Properties as $prop) {
+    $name = $prop->GetInputName($class, $id);
+    ?>
+    <label for="<?php echo $name; ?>" class="sf box size-3"><?php echo $prop->Name; ?></label>
+	<div class="sf box size-7"><?php Editor::RenderInput($prop, $Instance, Editor::VIEW_DETAIL); ?></div>
+<?php } ?>
+</section>
+<section>
+<h3>Collections</h3>
+<div id="Collections" class="sf box tab-group">
+	<div class="sf box tab-controls">
+<?php
+$colNum = count($Meta->Collections);
+for ($i = 1; $i <= $colNum; $i++) {
+	$colName = $Meta->Collections[($i-1)]->ClassName;
+	echo "<button type='button' class='sf box size-2 button dark tab-button' onclick='tabSwitch(\"Collections\",$i)'>$colName</button>";
+} ?>
+	</div>
+<?php
+foreach ($Meta->Collections as $col) {
+	$list = $col->GetList($id);
+    
+	echo '<div class="sf box tab-item">';
+	Html::GetBlock('ListView',array(
+                                'Meta' => $col->MetaInfo,
+                                'List' => $list
+                            ));
+	echo '</div>';
+}
+if ($colNum > 0) {
+	echo '<script>tabSwitch("Collections",1);</script>';
+}
+?>
+</section>

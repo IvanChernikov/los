@@ -1,0 +1,4 @@
+<div class="sf box size-9 darker round mb" style="float:<?php echo ($IsLeft ? 'left' : 'right'); ?>;">
+    <p class="sf edge darkish" style="color: #F0A020;"><?php echo $Quote->What; ?></p>
+    <div class="sf ma" style="font-size: 0.75em;"><?php echo sprintf("%s - %s",$Quote->Who, date('F j, Y', strtotime($Quote->When))); ?></div>
+</div>

@@ -1,0 +1,20 @@
+body {
+	min-width: 800px;	
+}
+input, input[readonly], select, label , textarea{
+	color: #000;
+	background: 0;
+	border: 0 !important;
+	border-bottom: 1px solid #a0a0a0 !important;
+}
+label {
+	font-weight: bold;
+	text-decoration: underline;
+}
+input:hover, input:focus, select:focus {
+	font-style: italic;
+	background: #e0e0e0;
+}
+.sf.sheet {padding: 4px; background: #fff; font-size: 11px;}
+.sf.block {padding: 4px; border: 1px solid #a0a0a0; border-radius: 4px;}
+.sf.sheet .sf.button:not(.tab-button) {line-height: 1em; height: 2em; float: right;}

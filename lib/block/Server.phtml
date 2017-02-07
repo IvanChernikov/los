@@ -1,0 +1,14 @@
+<section id="Server<?php echo $Server->ID;?>" class="sf round darker cut-out">
+	<h2 class="sf edge darkish"><?php echo $Server->Name;?></h2>
+	<p class="sf edge dark lh32">
+		<img src="/css/img/icon_<?php echo $Server->Type;?>_32x32.png" alt="<?php echo $Server->Type;?>" class="sf hw32">
+<?php echo $Server->ResolvedAddress();?></p>
+	<div class="sf wrapper">
+		<input class="sf box size-5 start button Status" type="button" onclick="new Server(<?php echo $Server->ID;?>).getStatus()" value="Fetching">
+		<input class="sf box size-5 end button Count" type="button" onclick="new Server(<?php echo $Server->ID;?>).getInfo()" value="N/A">
+	</div>
+	
+	<div class="sf wrapper edge dark Detail" style="display:none;">
+	</div>
+	<script type="text/javascript">setTimeout(function() {new Server(<?php echo $Server->ID;?>).getStatus();}, 1000)</script>
+</section>

@@ -1,0 +1,22 @@
+<article>
+    <h1>Quotes</h1>
+    <?php if(Auth::UserAuthorized(1)) { ?>
+    <form class="sf wrapper dark round mb" method="post" action="/home/quote">
+        <h2 class="sf box">New</h2>
+        <label class="sf box size-3">What was said?</label>
+        <textarea class="sf box size-7" name="What" style="resize: vertical;"></textarea>
+        <label class="sf box size-3">Who said it?</label>
+        <input class="sf box size-7" name="Who" type="text">
+        <button type="submit" class="sf box button">Submit</button>
+    </form>
+    <?php } ?>
+    <div class="sf wrapper round">
+        <h2 class="sf box">List</h2>
+        <?php
+        $IsLeft = true;
+        foreach ($Quotes as $Quote) {
+			Html::GetBlock('Quote', array('Quote' => $Quote, 'IsLeft' => $IsLeft));
+			$IsLeft = !$IsLeft;
+        } ?>
+    </div>
+</article>

@@ -1,0 +1,11 @@
+<div class="sf wrapper dark edge round lh32">
+<?php
+$pathArray = Router::GetCommandArray(false);
+$path = '';
+foreach ($pathArray as $part) {
+    $path .= "/$part";
+    $name = ucfirst($part);
+    echo "<span style='font-weight:bold;'>&#62</span><a href='$path'>$name</a>";
+}
+?>
+</div>

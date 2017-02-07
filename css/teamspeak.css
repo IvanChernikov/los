@@ -1,0 +1,60 @@
+.ts3_viewer {
+	box-sizing: border-box;
+	width: 100%;
+	text-align: left;
+}
+.ts3_viewer .suffix {
+	text-align: right;
+}
+.ts3_viewer td:first-child {
+	width: 40px;
+}
+.server {
+	font-weight: bold;
+	color: #f0a080;
+}
+.channel {
+	font-weight: bold;
+}
+.query, .spacer {
+	display:none;
+}
+.ts3_viewer * {
+	padding: 0;
+	margin: 0;
+	height: 16px;
+	line-height: 16px;
+	font-size: 9pt;
+	vertical-align:top;
+}
+
+.ts3_viewer {
+	list-style: none;
+	height: 32px;
+	border-radius: 3px;
+
+}
+.ts3_viewer div div{
+	display: inline-block;
+}
+.ts3_viewer .prefix img {visibility: hidden;}
+.ts3_viewer img {
+	box-sizing:content-box;
+	margin: 2px;
+	padding: 2px;
+	border: 1px solid #a08040;
+	border-radius: 3px;
+	background: linear-gradient(to bottom, #f1e767 0%,#feb645 100%);
+}
+.ts3_viewer .corpus {
+	padding: 2px;
+	height: 28px;
+	line-height: 24px;
+	background: linear-gradient(to bottom, #404040 0%,#383838 100%);
+	border-radius: 3px;
+}
+.ts3_viewer .corpus.client {
+	color: #222;
+	background: linear-gradient(to bottom, #d0d0d0 0%,#c8c8c8 100%);
+	padding-right: 4px;
+}

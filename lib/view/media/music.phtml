@@ -1,0 +1,73 @@
+<article id="MusicPlayer">
+	<h1>Music Player</h1>
+	<section id="PlayerContainer" class="sf wrapper">
+	<div id="TrackContainer" class="sf box round lh32" style="height: 48px; cursor: pointer; border: 1px solid #404040; background: #202020; overflow: hidden;">
+		<div id="TrackBall" class="sf box" style="background: linear-gradient(to top, #2c3e50 , #3498db); height: 48px; transition: width 1s;"></div>
+		<div id="TrackText" class="sf box txt-center" style="top: -40px;">0:00/0:00</div>
+	</div>
+	<p id="SongInformation" class="sf box orange edge round txt-center lh32" style="color: #fff">
+		Now Playing: <span id="SongTitle" style="color: rgb(52, 152, 219)"></span> - <span id="SongArtist" style="color: rgb(52, 152, 242)"></span>
+	</p>
+	<div class="sf box">
+		<button type="button" class="sf box size-2 button chrome" onclick="MusicPlayer.previous()">
+			<div class="sf icon-big previous"></div>
+		</button>
+		<button type="button" class="sf box size-2 button chrome" onclick="MusicPlayer.pause()">
+			<div class="sf icon-big pause"></div>
+		</button>
+		<button type="button" class="sf box size-2 button chrome" onclick="MusicPlayer.play()">
+			<div class="sf icon-big play"></div>
+		</button>
+		<button type="button" class="sf box size-2 button chrome" onclick="MusicPlayer.next()">
+			<div class="sf icon-big next"></div>
+		</button>
+		<button type="button" id="PlayerVolume" class="sf box size-2 button chrome">
+			<input class="sf box icon-big" type="range" min="0" max="1" step="0.01" value="0.75" onchange="MusicPlayer.setVolume(this.value)">
+		</button>
+	</div>
+	
+	<div id="PlayerTabs" class="sf box tab-group">
+		<div class="sf box tab-controls">
+			<button type="button" class="sf box size-2 button dark tab-button" onclick="tabSwitch('PlayerTabs',1)">Queue</button>
+			<!--<button type="button" class="sf box size-2 button dark tab-button" onclick="tabSwitch('PlayerTabs',2)">History</button>-->
+			<button type="button" class="sf box size-2 button dark tab-button" onclick="tabSwitch('PlayerTabs',2)">Playlist</button>
+			<button type="button" class="sf box size-2 button dark tab-button" onclick="tabSwitch('PlayerTabs',3)">Tracks</button>
+		</div>
+		<div id="QueueContainer" class="sf box tab-item"></div>
+		<!--<div id="HistoryContainer" class="sf box tab-item"></div>-->
+		<div id="PlaylistContainer" class="sf box tab-item"></div>
+		<div id="TrackList" class="sf box tab-item">
+		<?php foreach ($Tracks as $Track) { ?>
+			<div class="sf wrapper">
+				<button class="sf box button size-2 start light lh32" onclick="MusicPlayer.queueSong(<?php echo $Track->ID; ?>)">To Queue</button>
+				<p class="sf box size-4 edge middle lighter lh32"><?php echo $Track->Title;?></p>
+				<p class="sf box size-4 edge end lighter lh32"><?php echo $Track->Artist;?></p>
+			</div>
+		<?php }?>
+		</div>
+	</div>
+</section>
+	
+	<audio onended="MusicPlayer.next()" id="MusicPlayerControl"></audio>
+	<script type="text/javascript">
+		MusicPlayer = new Player();
+		MusicPlayer.init();
+		tabSwitch('PlayerTabs',4);
+	</script>
+<!--
+	<section class="sf box darkish round">
+		<h2 class="sf edge dark mb">Track List</h2>
+
+		<?php foreach ($Tracks as $Track) { ?>
+			<div class="sf wrapper">
+				<button class="sf box button size-2 start light lh32" onclick="MusicPlayer.queueSong(<?php echo $Track->ID; ?>)">Queue</button>
+				<p class="sf box size-4 edge middle lighter lh32"><?php echo $Track->Title;?></p>
+				<p class="sf box size-4 edge end lighter lh32"><?php echo $Track->Artist;?></p>
+				<!--<audio class="sf box size-3 right edge end darkish" controls>
+					<source src="<?php echo $Track->GetFile()->GetUrl();?>">
+				</audio>
+			</div>
+		<?php }?>
+	</section>
+-->
+</article>

@@ -1,0 +1,7 @@
+<form id="WallReplyForm<?php echo $ID;?>" class="sf wrapper" action="/wall/reply/<?php echo $ID;?>" method="POST">
+	<textarea name="Content" placeholder="Reply text" class="sf"></textarea>
+	<div class="sf wrapper">
+		<input type="button" value="Cancel" class="sf size-2 button end right" onclick="$('#WallReplyForm<?php echo $ID;?>').remove();">
+		<input type="submit" value="Reply" class="sf size-2 button start right">
+	</div>
+</form>

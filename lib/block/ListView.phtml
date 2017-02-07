@@ -1,0 +1,23 @@
+<table>
+<thead>
+    <tr>
+<?php foreach ($Meta->Properties as $prop) {
+    $title = $prop->Name;
+    echo "<th>$title</th>";
+} ?>
+    </tr>
+</thead>
+<tbody>
+<?php foreach ($List as $item) {
+    $class = $Meta->ClassName;
+    $id = $item->ID;
+    echo "<tr ondblclick='window.open(\"/admin/detailView/$class/$id\"),\"_blank\"'>";
+    foreach ($Meta->Properties as $prop) {
+        echo '<td>';
+        Editor::RenderInput($prop, $item);
+        echo '</td>';
+    }
+    echo '</tr>';
+} ?>
+</tbody>
+</table>

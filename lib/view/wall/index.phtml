@@ -1,0 +1,15 @@
+<article>
+<h1>Search</h1>
+<form class="sf wrapper" action="/wall/search/" method="post">
+	<input type="text" name="SearchString" class="sf box size-8">
+	<input type="submit" class="sf box edge end size-2 button" value="Search">
+</form>
+</article>
+<article>
+	<h1>WallPosts</h1>
+<?php
+	foreach ($WallPosts as $Post) {
+		echo Html::GetBlock('WallPost',array('Post' => $Post));
+	}
+?>
+</article>

@@ -1,0 +1,19 @@
+<article>
+<h1>User List</h1>
+	<div class="sf wrapper dark round">
+		<p class="sf box size-3">Name</p>
+		<p class="sf box size-3">Member Since</p>
+		<p class="sf box size-3">Last Login</p>
+	</div>
+<?php foreach($Users as $User) { ?>
+	<a href="/user/profile/<?php echo $User->ID;?>">
+		<p class="sf wrapper">
+			<span class="sf box size-3">
+				<img src="/css/img/rank_<?php echo $User->AccessLevel; ?>.png" alt="Rank">
+				<?php echo $User->Username; ?></span>
+			<span class="sf box size-3"><?php echo date('F j, Y', strtotime($User->TimeCreated)); ?></span>
+			<span class="sf box size-4"><?php echo date('H:i \o\n F j, Y', strtotime($User->TimeLoggedOn)); ?></span>
+		</p>
+	</a>
+<?php } ?>
+</article>

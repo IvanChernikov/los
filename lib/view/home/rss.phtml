@@ -1,0 +1,11 @@
+<article>
+<?php
+if (isset($Feeds)) {
+    foreach ($Feeds as $Feed) {
+        Html::GetBlock('RssFeed',array('Feed' => $Feed));
+    }
+} else {
+    Html::GetBlock('RssFeed',array('Feed' => $Feed));
+}
+?>
+</article>

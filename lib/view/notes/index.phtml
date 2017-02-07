@@ -1,0 +1,26 @@
+<article>
+    <h1>My Notes</h1>
+    <div class="sf wrapper">
+<?php
+$Categories = [];
+foreach ($Groups as $Group) { ?>
+
+<?php
+if (!in_array($Group->Category, $Categories)) {
+    $Categories[] = $Group->Category;
+?>
+        <h2 class="sf box lh32"><?php echo $Group->Category ?></h2>
+<?php } ?>
+        <div draggable="true" class="sf box size-1"><img class="sf hw32" src="/css/img/cog_32x32.png"></div>
+        <a class="sf box button size-9 lh32" href="/notes/group/<?php echo $Group->ID ?>"><?php echo $Group->Title ?></a>
+<?php } ?>
+    </div>
+    <form class="sf wrapper mt">
+        <input name="Category" class="sf box size-5" type="text" placeholder="Category" list="Categories">
+        <input name="Title" class="sf box size-5" type="text" placeholder="Title">
+        <input class="sf box full-size button lh32" type="submit" value="Create New">
+        <datalist id="Categories">
+            <?php foreach ($Categories as $cat) { echo "<option value='$cat'>"; }?>
+        </datalist>
+    </form>
+</article>

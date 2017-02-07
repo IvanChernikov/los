@@ -1,0 +1,13 @@
+<article>
+<h1>Picture Gallery</h1>
+<section class="sf box darkish round">
+<h2 class="sf box edge dark mb">Recent Uploads</h2>
+<div class="sf wrapper txt-center">
+<?php foreach ($Images as $Image) { ?>
+	<div class="sf box thumb c-zoom-in darkest edge mb" onclick="$(this).toggleClass('full-screen center thumb c-zoom-in c-zoom-out')">
+		<img class="sf" src="<?php echo $Image->GetFile()->GetUrl();?>">
+	</div>
+<?php }?>
+</div>
+</section>
+</article>

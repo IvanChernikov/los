@@ -1,0 +1,4 @@
+<article>
+	<h1>Servers</h1>
+	<?php foreach (Server::LoadAll() as $Server) { Html::GetBlock('Server',array('Server' => $Server)); } ?>
+</article>

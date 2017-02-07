@@ -1,0 +1,12 @@
+<section>
+	<h3 class="sf hide">Reply-<?php echo $Reply->ID;?></h3>
+	<footer class="sf box size-2 edge start light">
+		<a class="sf box" href="/user/profile/<?php echo $Reply->AuthorID;?>">
+			<img alt="rank" src="/css/img/rank_<?php echo $Reply->GetAuthor()->AccessLevel; ?>.png" class="sf hw16">
+			<?php echo $Reply->GetAuthor()->Username;?></a>
+		<time class="sf box" datetime="<?php echo $Reply->TimeCreated;?>">
+			<?php echo date('F j', strtotime($Reply->TimeCreated));?>
+		</time>
+	</footer>
+	<p class="sf box size-8 edge end darkish"><?php echo $Reply->Content; ?></p>
+</section>

@@ -1,0 +1,12 @@
+<article>
+<?php if (isset($file)) { ?>
+<embed style="top:0;left:0;width:100%;height:100%;position:fixed;z-index:1000;" 
+	src="/media/flash/<?php echo $file; ?>.swf" frameborder="0"></embed>
+<?php } else { ?>
+	<h1>Flash Files</h1>
+	<ul>
+		<li><a href="/media/flash/420">420</a></li>
+		<li><a href="/media/flash/epilepsy">Epilepsy</a></li>
+	</ul>
+<?php } ?>
+</article>

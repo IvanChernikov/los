@@ -1,0 +1,129 @@
+<h1>Verbal Duels</h1>
+<article class="sf sheet child-txt-center">
+	<form id="VerbalDuel" action="javascript:void(0)" onchange="recalculate()">
+		<div class="sf wrapper block round">
+			<div class="sf box block">
+				<label class="sf box size-2">Edges:</label>
+				<input type="number" readonly value="0" id="Edges" class="sf box size-3">
+				<label class="sf box size-2">Determination</label>
+				<input type="number" readonly value="0" id="Determination" class="sf box size-3">
+			</div>
+			<label class="sf box size-4">Tactic</label>
+			<label class="sf box size-3">Key Skill</label>
+			<label class="sf box size-3">Skill Mod</label>
+		</div>
+		<div class="sf wrapper block round">
+		
+		</div>
+	</form>
+<script>
+var tactics = {
+	Allegory: ['Knowledge (history)','Knowledge (religion)','Perform (oratory)'],
+	Baiting: ['Bluff','Intimidate','Perform (comedy)','Sense Motive'],
+	EmotionalAppeal: ['Bluff','Perform (oratory)','Sense Motive'],
+	Flattery: ['Bluff','Diplomacy','Knowledge (nobility)'],
+	Logic: ['Knowledge (history)','Knowledge (nobility)','Knowledge (religion)','Other'],
+	Mockery: ['Bluff','Intimidate','Perform (comedy)'],
+	Presence: ['Intimidate','Knowledge (nobility)'],
+	RedHerring: ['Bluff','Perform (oratory)'],
+	Rhetoric: ['Diplomacy','Linguistics','Perform (act)', 'Perform (oratory)'],
+	Wit: ['Linguistics','Perform (comedy)']
+};
+var allSkills = {};
+var miscBonuses = {};
+var form = document.getElementById('VerbalDuel');
+for (var i in tactics) {
+	var skills = tactics[i];
+	var label = document.createElement('label');
+	label.className = 'sf box size-4';
+	label.innerText = i.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); });
+	
+	form.children[0].appendChild(label);
+	
+	var select = document.createElement('select');	
+	select.id = i;
+	select.className = 'sf box size-3';
+	for (var j in skills) {
+		var skill = skills[j];
+		allSkills[skill] = 0;
+		var option = document.createElement('option');
+		option.value = skill;
+		option.innerText = skill;
+		select.appendChild(option);
+	}
+	form.children[0].appendChild(select);
+	var input = document.createElement('input');
+	input.type = 'number';
+	input.readOnly = true;
+	input.id = i + 'Mod';
+	input.className = 'sf box size-3 mod';
+	form.children[0].appendChild(input);
+}
+var label = document.createElement('label');
+label.className = 'sf box size-4'
+label.innerText = 'Skill';
+form.children[1].appendChild(label);
+label = document.createElement('label');
+label.className = 'sf box size-3 '
+label.innerText = 'Mod';
+form.children[1].appendChild(label);
+label = document.createElement('label');
+label.className = 'sf box size-3'
+label.innerText = 'Misc Bonus';
+form.children[1].appendChild(label);
+
+// allSkills.sort();
+var keys = Object.keys(allSkills);
+keys.sort();
+
+for (var i = 0; i < keys.length; i++) {
+	var skill = allSkills[keys[i]];
+	var label = document.createElement('label');
+	label.className = 'sf box size-4'
+	label.innerText = keys[i];
+	form.children[1].appendChild(label);
+	var input = document.createElement('input');
+	input.className = 'sf box size-3';
+	input.type = 'number';
+	input.id = keys[i];
+	input.value = 0;
+	input.onchange = function (e) { allSkills[e.target.id] = parseInt(e.target.value);};
+	form.children[1].appendChild(input);
+	
+	input = document.createElement('input');
+	input.className = 'sf box size-3';
+	input.type = 'number';
+	input.id = keys[i] + 'Misc';
+	input.value = 0;
+	input.onchange = function (e) { miscBonuses[e.target.id.replace('Misc','')] = parseInt(e.target.value)};
+	form.children[1].appendChild(input);
+}
+function recalculate() {
+	var selectors = $('select');
+	for (var i = 0 ; i < selectors.length ; i++) {
+		var select = $(selectors[i]);
+		var value = select.val();
+		var match = false;
+		for (var j = 0; j < selectors.length ; j++) {
+			var compare = $(selectors[j]);
+			if (!compare.is(select[0]) && !match) {
+				if (value === compare.val()) {
+					match = true;
+				}
+			}
+		}
+		if (match) {
+			select.css('color','red');
+		} else {
+			select.css('color','green');
+		}
+	}
+	var inputs = $('.sheet input.mod');
+	for (var i = 0; i <inputs.length ; i++) {
+		var input = inputs[i];
+		var select = document.getElementById(input.id.replace('Mod',''));
+		input.value = allSkills[select.value];
+	}
+}
+</script>
+</article>

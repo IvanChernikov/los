@@ -1,0 +1,149 @@
+<article class="sf sheet round">
+	<section class="sf wrapper round">
+	<?php if ( isset($Building)) { ?>
+		<a href="/pathfinder/building/" class="sf button box size-2 lh32" style="line-height:2em;">Back</a>
+		<h2 class="sf box size-8 mb"><?php echo $Building->Name; ?></h2>
+		<p class="sf box mb"><?php echo $Building->Notes; ?></p>
+		<div id="RoomTabs" class="sf box tab-group child-txt-center">
+			<div class="sf box tab-controls">
+				<button type="button" class="sf box size-3 button dark tab-button start" onclick="tabSwitch('RoomTabs',1)">Profits</button>
+				<button type="button" class="sf box size-3 button dark tab-button middle" onclick="tabSwitch('RoomTabs',2)">Costs</button>
+				<button type="button" class="sf box size-4 button dark tab-button end" onclick="tabSwitch('RoomTabs',3)">Special Benefits</button>
+			</div>
+			<div class="sf box tab-item lh32">
+				<h2 class="sf box">Rooms</h2>
+				<label class="sf box size-4">Name</label>
+				<label class="sf box size-1">Number</label>
+				<label class="sf box size-1">Gold</label>
+				<label class="sf box size-1">Goods</label>
+				<label class="sf box size-1">Influence</label>
+				<label class="sf box size-1">Labor</label>
+				<label class="sf box size-1">Magic</label>
+				<?php
+				$ProfitArray = array(0,0,0,0,0);
+				foreach ($Building->Rooms as $Room) { $Count = $Room->Count;$Room = $Room->Room; ?>
+					<input readonly type="text" class="sf box size-4" value="<?php echo $Room->Name;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->PayGP*$Count; $ProfitArray[0] += $Room->PayGP*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->PayGoods*$Count; $ProfitArray[1] += $Room->PayGoods*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->PayInfluence*$Count; $ProfitArray[2] += $Room->PayInfluence*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->PayLabor*$Count; $ProfitArray[3] += $Room->PayLabor*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->PayMagic*$Count; $ProfitArray[4] += $Room->PayMagic*$Count;?>">
+				<?php } ?>
+				<h2 class="sf box">Teams</h2>
+				<?php
+				$Personnel = 0;
+				foreach ($Building->Teams as $Team) { $Count = $Team->Count;$Team = $Team->Team; $Personnel += $Count * $Team->Size; ?>
+					<input readonly type="text" class="sf box size-4" value="<?php echo $Team->Name;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->PayGP*$Count; $ProfitArray[0] += $Team->PayGP*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->PayGoods*$Count; $ProfitArray[1] += $Team->PayGoods*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->PayInfluence*$Count; $ProfitArray[2] += $Team->PayInfluence*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->PayLabor*$Count; $ProfitArray[3] += $Team->PayLabor*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->PayMagic*$Count; $ProfitArray[4] += $Team->PayMagic*$Count;?>">
+				<?php } ?>
+
+				<input readonly type="text" class="sf box size-5" value="Total">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $ProfitArray[0];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $ProfitArray[1];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $ProfitArray[2];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $ProfitArray[3];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $ProfitArray[4];?>">
+			</div>
+			<div class="sf box tab-item lh32">
+				<h2 class="sf box">Rooms</h2>
+				<label class="sf box size-3">Name</label>
+				<label class="sf box size-1">Number</label>
+				<label class="sf box size-1">Gold</label>
+				<label class="sf box size-1">Days</label>
+				<label class="sf box size-1">Goods</label>
+				<label class="sf box size-1">Influence</label>
+				<label class="sf box size-1">Labor</label>
+				<label class="sf box size-1">Magic</label>
+				<?php
+				$CostsArray = array(0,0,0,0,0,0);
+				foreach ($Building->Rooms as $Room) { $Count = $Room->Count;$Room = $Room->Room; ?>
+					<input readonly type="text" class="sf box size-3" value="<?php echo $Room->Name;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostGP*$Count; $CostsArray[0] += $Room->CostGP*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostDays*$Count; $CostsArray[1] += $Room->CostDays*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostGoods*$Count; $CostsArray[2] += $Room->CostGoods*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostInfluence*$Count; $CostsArray[3] += $Room->CostInfluence*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostLabor*$Count; $CostsArray[4] += $Room->CostLabor*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Room->CostMagic*$Count; $CostsArray[5] += $Room->CostMagic*$Count;?>">
+				<?php } ?>
+				<h2 class="sf box">Teams</h2>
+				<?php
+				foreach ($Building->Teams as $Team) { $Count = $Team->Count; $Team = $Team->Team; ?>
+					<input readonly type="text" class="sf box size-3" value="<?php echo $Team->Name;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostGP*$Count; $CostsArray[0] += $Team->CostGP*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostDays*$Count; $CostsArray[1] += $Team->CostDays*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostGoods*$Count; $CostsArray[2] += $Team->CostGoods*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostInfluence*$Count; $CostsArray[3] += $Team->CostInfluence*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostLabor*$Count; $CostsArray[4] += $Team->CostLabor*$Count;?>">
+					<input readonly type="text" class="sf box size-1" value="<?php echo $Team->CostMagic*$Count; $CostsArray[5] += $Team->CostMagic*$Count;?>">
+				<?php } ?>
+
+
+
+				<input readonly type="text" class="sf box size-4" value="Total">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[0];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[1];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[2];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[3];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[4];?>">
+				<input readonly type="text" class="sf box size-1" value="<?php echo $CostsArray[5];?>">
+			</div>
+
+			<ul class="sf box tab-item lh32">
+			<?php foreach ($Building->Rooms as $Room) { $Room = $Room->Room; if (isset($Room->SpecialProperties) && $Room->SpecialProperties !== "") {?>
+				<li><?php echo $Room->Name . ': ' . $Room->SpecialProperties; ?></li>
+			<?php }} ?>
+			</ul>
+		</div>
+		<script>
+			tabSwitch('RoomTabs',1);
+		</script>
+		<?php if ($Building->OwnerID === Auth::GetCurrentUserID()) {?>
+		<form class="sf box round block lh32 mt mb" method="post" action="/pathfinder/building/addRoom/">
+			<input type="hidden" name="BuildingID" value="<?php echo $Building->ID;?>">
+			<select name="RoomID" class="sf box size-8">
+				<?php foreach ($Rooms as $Room) { ?>
+					<option value="<?php echo $Room->ID; ?>"><?php echo $Room->Name;?></option>
+				<?php } ?>
+			</select>
+			<button class="sf box button size-2 end" type="submit">Add Room</button>
+		</form>
+		<form class="sf box round block lh32 mt mb" method="post" action="/pathfinder/building/addTeam/">
+			<input type="hidden" name="BuildingID" value="<?php echo $Building->ID;?>">
+			<select name="TeamID" class="sf box size-8">
+				<?php foreach ($Teams as $Team) { ?>
+					<option value="<?php echo $Team->ID; ?>"><?php echo $Team->Name;?></option>
+				<?php } ?>
+			</select>
+			<button class="sf box button size-2 end" type="submit">Add Team</button>
+		</form>
+		<?php } ?>
+
+	<?php } else { ?>
+
+		<h2 class="sf box">Buidling List</h2>
+		<?php foreach ($Buildings as $Building) { ?>
+		<div class="sf box mb round block">
+			<a class="sf box lh32" href="/pathfinder/building/<?php echo $Building->ID;?>"><?php echo $Building->Name;?></a>
+			<p class="sf box"><?php echo $Building->Notes;?></p>
+		</div>
+		<?php }
+			if(Auth::UserAuthenticated()) {
+		?>
+
+		<form class="sf box round block lh32" method="post" action='/pathfinder/building/addBuilding/'>
+			<h3 class="sf box">New Building</h3>
+			<input type="text" name="Name" placeholder="Name" class="sf box">
+			<textarea class="sf box" placeholder="Notes" name="Notes"></textarea>
+			<input type="submit" class="sf box button" value="Create">
+		</form>
+		<?php }} ?>
+	</section>
+</article>

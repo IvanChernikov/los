@@ -1,0 +1,25 @@
+@media (max-width: 1024px) {
+	.sf.mobile-full {
+		width: 100% !important;
+		float: none !important;
+	}
+    article {
+        box-sizing: border-box;
+        overflow: hidden;
+        width: auto!important;
+    }
+    article p {
+        padding: .5em!important;
+    }
+	nav li.sf.box {
+		width: 100%;
+		display: block;
+		float: none;
+	}
+	nav li > a.sf.button {
+		margin: 0;
+	}
+	.sf.wrapper {
+		padding: 0;
+	}
+}

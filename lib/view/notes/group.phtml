@@ -1,0 +1,19 @@
+<?php
+    function RenderNode($Node) {
+        ?>
+        <div class="sf note">
+            <textarea id="NoteNode<?php echo $Node->ID;?>" class="sf note-body"><?php echo $Node->Value;?></textarea>
+        <?php
+        foreach ($Node->Children as $Child) {
+            RenderNode($Child);
+        }?>
+    </div>
+    <?php
+    }
+?>
+<article>
+    <h2><?php echo $Group->Title; ?></h2>
+    <div class="sf wrapper">
+        <?php foreach ($Notes as $Note) RenderNode($Note); ?>
+    </div>
+</article>

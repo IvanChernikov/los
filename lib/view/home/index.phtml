@@ -1,0 +1,43 @@
+<div class="sf box size-3 right mobile-full">
+	<?php echo Html::GetBlock('Monitor'); ?>
+	<article>
+		<h1>Recent Quotes</h1>
+		<?php
+		$IsLeft = true;
+		foreach ($Quotes as $Quote) {
+			Html::GetBlock('Quote', array('Quote' => $Quote, 'IsLeft' => $IsLeft));
+			$IsLeft = !$IsLeft;
+		} ?>
+	</article>
+	<article>
+		<h1>RSS Feeds</h1>
+		<div class="sf wrapper edge dark rss-text">
+		<?php if (isset($Feeds)) {
+			foreach ($Feeds as $Feed) { ?>
+				<button
+					class="sf box button green"
+					onclick="getBlock('RssFeed',function (data) {document.getElementById('RssFeed<?php echo $Feed->ID;?>').innerHTML = data}, {'id': <?php echo $Feed->ID;?>})">
+					<?php echo $Feed->Name;?>
+				</button>
+				<div class="sf box content" id="RssFeed<?php echo $Feed->ID;?>"></div>
+			<?php }
+		}?>
+		</div>
+	</article>
+</div>
+<div class="sf box size-7 pr mobile-full">
+	<article>
+		<h1>Recent Posts</h1>
+		<?php
+		foreach ($WallPosts as $post) {
+			Html::GetBlock('WallPost', array('Post' => $post));
+		}
+		?>
+	</article>
+	<?php if (Auth::UserAuthorized(2)) { ?>
+	<article>
+		<h1>New Post</h1>
+		<?php echo Html::GetBlock('WallPostForm'); ?>
+	</article>
+	<?php } ?>
+</div>

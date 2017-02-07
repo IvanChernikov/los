@@ -1,0 +1,31 @@
+Options +FollowSymLinks
+IndexIgnore */*
+# Enable Mods 
+RewriteEngine On
+ExpiresActive On
+
+# PHP Settings
+php_value upload_max_filesize 100M
+php_value post_max_size 110M
+php_value max_file_uploads 10
+
+# Rules
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php
+
+<Files 'config.php'>
+Order Allow,Deny
+Deny from all
+</Files>
+<Files 'navigation.php'>
+Order Allow,Deny
+Deny from all
+</Files>
+
+# Cache Control
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "public"
+Header set Expires "Thu, 15 Apr 2010 20:00:00 GMT"
+</FilesMatch>
+
+Options -Indexes

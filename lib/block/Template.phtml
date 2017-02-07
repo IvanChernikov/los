@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<!-- METADATA -->
+	<meta charset="UTF-8">
+	<meta name="description" content="Leg of Shadows Clam Website">
+	<meta name="author" content="Ivan Chernikov">
+	<meta name="keywords" content="los,clan,clam,leg,of,shadows,shadow,gaming">
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<meta name="google-site-verification" content="9h5t30u0ZtPIiNoy5W1nvy5QVgwQKCBstECwFXSBpLA" />
+	<!-- END METADATA -->
+	<!-- LINKS -->
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16">
+	<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+	<!-- END LINKS -->
+    <!-- STYLES -->
+    <?php
+        foreach ($View->Styles as $style) {
+            echo Html::Style($style, true);
+        }
+    ?>
+    <!-- END STYLES -->
+	<!-- SCRIPTS -->
+    <?php
+        foreach ($View->Scripts as $script) {
+            echo Html::Script($script);
+        }
+    ?>
+	<!-- END SCRIPTS -->
+	<title><?php echo APP_TITLE.': '.ucfirst($View->Name);?></title>
+</head>
+<body>
+<div class="sf wrapper center">
+	<?php Html::GetBlock('Navigation'); ?>
+	<?php Html::GetBlock('Path'); ?>
+	<div class="sf box size-full">
+		<?php Html::GetView($View); ?>
+	</div>
+</div>
+<!--<footer>
+	<p>Written by Shadow<br>Additional thanks to Krieger</p>
+	<p><a href="mailto:admin@legofshadows.com?Subject=Website%20Question" target="_top">Contact Administrator</a></p>
+	<p>LoS is not recruiting<br>&copy;2014-2015</p>
+</footer>-->
+</body>
+</html>

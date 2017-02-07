@@ -1,0 +1,20 @@
+<article>
+<?php if (isset($Model)) { ?>
+    <h2>List view: <?php echo $Model ?></h2>
+    <div class="sf wrapper data">
+        <?php Html::GetBlock('ListView',array(
+                                'Meta' => $Meta,
+                                'List' => $List
+                            )); ?>
+    </div>
+
+<?php } else {?>
+<h2>Object Lists</h2>
+<ul><?php
+$files = scandir(PATH_MODEL);
+foreach($files as $file) {
+    $file = preg_replace('/(\.|php\b)+/','',$file);
+    echo "<li><a href='/admin/listView/$file'>$file</a></li>";
+}?></ul>
+<?php } ?>
+</article>

@@ -1,0 +1,22 @@
+<article id="UserProfile">
+    <h1><img src="/css/img/rank_<?php echo $User->AccessLevel; ?>.png"><?php echo $User->Username; ?></h1>
+    <section class="sf wrapper dark round">
+		<h2>Info</h2>
+		<p class="sf box size-1">Name:</p>
+		<p class="sf box size-5"><?php echo $User->FirstName . ' ' . $User->LastName; ?></p>
+		<p class="sf box size-1">Joined:</p>
+		<p class="sf box size-3"><?php echo date('d/m/Y', strtotime($User->TimeCreated)); ?></p>
+		
+		<p class="sf box size-1">Email:</p>
+		<p class="sf box size-5"><?php echo $User->Email; ?></p>
+		<p class="sf box size-1">Login:</p>
+		<p class="sf box size-3"><?php echo date('d/m/Y', strtotime($User->TimeLoggedOn)); ?></p>
+		
+    </section>
+	<section class="sf wrapper dark round">
+		<h2>Stats</h2>
+		<p>Posts: <?php echo $PostCount; ?></p>
+		<p>Replies: <?php echo $ReplyCount; ?></p>
+		<p>Uploads: <?php echo $UploadCount; ?></p>
+	</section>
+</article>

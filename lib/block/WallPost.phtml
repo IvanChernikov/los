@@ -1,0 +1,23 @@
+<section class="sf round darker cut-out" id="Post<?php echo $Post->ID;?>">
+	<h2 class="sf edge dark"><?php echo $Post->Title; ?></h2>
+	<div class="sf wrapper">
+		<footer class="sf box size-2 edge start light">
+			<a class="sf box" href="/user/profile/<?php echo $Post->AuthorID;?>">
+			<img alt="rank" src="/css/img/rank_<?php echo $Post->GetAuthor()->AccessLevel; ?>.png" class="sf hw16">
+			<?php echo $Post->GetAuthor()->Username;?></a>
+			<time class="sf box" datetime="<?php echo $Post->TimeCreated;?>">
+				<?php echo date('F j', strtotime($Post->TimeCreated));?>
+			</time>
+<?php if (Auth::UserAuthenticated()) { ?>
+	<?php if (Auth::GetCurrentUserID() === $Post->AuthorID) { ?>
+			<input class="sf box button darkish mt" type="button" onclick="editPost(this, <?php echo $Post->ID;?>)" value="Edit">
+	<?php } ?>
+			<input class="sf box button darkish mt" type="button" onclick="renderReplyForm(<?php echo $Post->ID;?>)" value="Reply">
+<?php } ?>
+		</footer>
+		<div class="sf box size-8 edge end darkish text-content" id="Content<?php echo $Post->ID;?>"><?php echo $Post->Content; ?></div>
+	</div>
+	<div class="sf wrapper mt">
+	<?php foreach ($Post->GetReplies() as $Reply) { echo Html::GetBlock('WallReply',array('Reply' => $Reply));} ?>
+	</div>
+</section>

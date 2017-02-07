@@ -1,0 +1,14 @@
+<article>
+<h1>Admin Panel</h1>
+<section>
+<ul>
+	<li><a href="/admin/userlist/">User List</a></li>
+	<li>Object Lists:<ul><?php
+		$files = scandir(PATH_MODEL);
+		foreach($files as $file) {
+			$file = preg_replace('/(\.|php\b)+/','',$file);
+			echo "<li><a href='/admin/listView/$file'>$file</a></li>";
+		}
+		?></ul></li>
+</ul>
+</section>

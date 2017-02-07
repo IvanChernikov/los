@@ -1,0 +1,12 @@
+<form action="/user/login/" method="POST" class="sf wrapper">
+	<div class="sf box">
+		<input class="sf box size-5<?php echo (Flag::Exists('UsernameInvalid') ? ' Error' : ''); ?>" 
+			placeholder="Username" name="Username" id="Username" type="text">
+		<input class="sf box size-5 <?php echo (Flag::Exists('PasswordInvalid') ? ' Error' : ''); ?>" 
+			placeholder="Password" name="Password" id="Password" type="password">
+	</div>
+	<div class="sf box">
+		<input class="sf box size-5 button edge start light" value="Login" type="submit">
+		<a class="sf box size-5 button edge end light" href="/user/register/">Register</a>
+	</div>
+</form>

@@ -1,0 +1,323 @@
+<article>
+<h1>Character Sheet</h1>
+<script>
+// Object holding character data
+Character = <?php echo json_encode($Character); ?>;
+InitCharacter(Character);
+</script>
+<form onchange="recalculateFields()" class="sf sheet round">
+<section class="sf wrapper round block">
+	<h2>General Bio</h2>
+	<div class="sf box child-txt-center">
+		<div class="sf wrapper">
+			<label class="sf box size-2">Name</label>
+			<label class="sf box size-2">Race</label>
+			<label class="sf box size-2">Player</label>
+			<label class="sf box size-2">Campaign</label>
+			<label class="sf box size-2">Background Skills</label>
+		</div>
+		<div class="sf wrapper">
+			<input id="Name" type="text" class="sf box size-2">
+			<input id="Race" type="text" class="sf box size-2">
+			<input id="Username" type="text" class="sf box size-2" readonly>
+			<input id="Campaign" type="text" class="sf box size-2">
+			<input id="HasBackgroundSkills" type="checkbox" class="sf box size-2">
+		</div>
+
+		<div class="sf wrapper">
+			<label class="sf box size-2">Size</label>
+			<label class="sf box size-2">Alignment</label>
+		</div>
+		<div class="sf wrapper">
+			<select id="Size" class="sf box size-2">
+				<option value="0">Fine</option>
+				<option value="1">Diminutive</option>
+				<option value="2">Tiny</option>
+				<option value="3">Small</option>
+				<option value="4">Medium</option>
+				<option value="5">Large</option>
+				<option value="6">Huge</option>
+				<option value="7">Gargantuan</option>
+				<option value="8">Colossal </option>
+			</select>
+			<select id="Alignment" class="sf box size-2">
+				<option value="0">None</option>
+				<option value="1">Lawful Good</option>
+				<option value="2">Neutral Good</option>
+				<option value="3">Chaotic Good</option>
+				<option value="4">Lawful Neutral</option>
+				<option value="5">True Neutral</option>
+				<option value="6">Chaotic Neutral</option>
+				<option value="7">Lawful Evil</option>
+				<option value="8">Neutral Evil</option>
+				<option value="9">Chaotic Evil</option>
+			</select>
+		</div>
+	</div>
+</section>
+
+<section class="sf wrapper round block">
+	<h2>Levels</h2>
+	<div class="sf box child-txt-center">
+		<label class="sf box size-2">Class</label>
+		<input id="ClassString" type="text" class="sf box size-6">
+		<button type="button" class="sf box size-2 button light" onclick="$('#Levels').toggle(400); if(this.innerHTML == 'Show') {this.innerHTML = 'Hide';} else {this.innerHTML = 'Show'}">Show</button>
+	</div>
+	<div id="Levels" class="sf box child-txt-center" style="display: none;">
+		<button type="button" class="sf box size-5 button light start" onclick="updateLevel('up')">Increase Level</button>
+		<button type="button" class="sf box size-5 button light end" onclick="updateLevel('down')">Decrease Level</button>
+		<div class="sf box">
+			<label class="sf box size-2">Class</label>
+			<label class="sf box size-1">HD</label>
+			<label class="sf box size-1">HP</label>
+			<label class="sf box size-1">BAB</label>
+			<label class="sf box size-1">Fort</label>
+			<label class="sf box size-1">Ref</label>
+			<label class="sf box size-1">Will</label>
+			<label class="sf box size-1">Skills</label>
+			<label class="sf box size-1">FC</label>
+		</div>
+		<!-- LEVELS -->
+	</div>
+	<script>
+bindInput(Character,"Name");
+bindInput(Character,"Race");
+bindInput(Character.Owner,"Username");
+bindInput(Character,"Campaign");
+bindInput(Character,"HasBackgroundSkills");
+
+bindInput(Character, "Size");
+bindInput(Character,'Alignment');
+
+GetLevelsHtml(Character.Levels);
+bindInputMethod(Character,"ClassString");
+
+	</script>
+</section>
+
+<section class="sf wrapper round block">
+	<h2>Base Statistics</h2>
+	<!-- Ability Scores -->
+	<div class="sf box size-4 child-txt-center block">
+		<label class="sf box size-4">Ability</label>
+		<label class="sf box size-2">Base</label>
+		<label class="sf box size-2">Total</label>
+		<label class="sf box size-2">Mod</label>
+
+		<label class="sf box size-4">STR</label>
+		<input id="STR" type="text" class="sf box size-2" value="10">
+		<input id="STRTotal" type="text" class="sf box size-2" value="10">
+		<input id="STRMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">DEX</label>
+		<input id="DEX" type="text" class="sf box size-2" value="10">
+		<input id="DEXTotal" type="text" class="sf box size-2" value="10">
+		<input id="DEXMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">CON</label>
+		<input id="CON" type="text" class="sf box size-2" value="10">
+		<input id="CONTotal" type="text" class="sf box size-2" value="10">
+		<input id="CONMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">INT</label>
+		<input id="INT" type="text" class="sf box size-2" value="10">
+		<input id="INTTotal" type="text" class="sf box size-2" value="10">
+		<input id="INTMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">WIS</label>
+		<input id="WIS" type="text" class="sf box size-2" value="10">
+		<input id="WISTotal" type="text" class="sf box size-2" value="10">
+		<input id="WISMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">CHA</label>
+		<input id="CHA" type="text" class="sf box size-2" value="10">
+		<input id="CHATotal" type="text" class="sf box size-2" value="10">
+		<input id="CHAMod" type="text" class="sf box size-2" value="0">
+
+		<label class="sf box size-4">Point-Buy</label>
+		<input id="PointBuy" type="text" class="sf box size-2">
+<script>
+for (var i in Character.Abilities) {
+	if (i != "ID" && i != "CharacterID" && i != "type") {
+		if (typeof Character.Abilities[i] === "function") {
+			bindInputMethod(Character.Abilities, i);
+		} else {
+			bindInput(Character.Abilities, i);
+		}
+	}
+}
+bindInputMethod(Character.Abilities,"PointBuy");
+</script>
+	</div>
+	<!-- Movement -->
+	<div class="sf box size-2 child-txt-center block">
+		<label class="sf box">Movement</label>
+
+		<label class="sf box size-3">Land</label>
+		<input id="LandSpeed" type="text" class="sf box size-7">
+
+		<label class="sf box size-3">Swim</label>
+		<input id="SwimSpeed" type="text" class="sf box size-7">
+
+		<label class="sf box size-3">Burrow</label>
+		<input id="BurrowSpeed" type="text" class="sf box size-7">
+
+		<label class="sf box size-3">Climb</label>
+		<input id="ClimbSpeed" type="text" class="sf box size-7">
+
+		<label class="sf box size-3">Fly</label>
+		<input id="FlySpeed" type="text" class="sf box size-3">
+		<select id="FlyAbility" class="sf box size-4">
+			<option value="0">None</option>
+			<option value="1">Clumsy</option>
+			<option value="2">Poor</option>
+			<option value="3">Average</option>
+			<option value="4">Good</option>
+			<option value="5">Perfect</option>
+		</select>
+	</div>
+
+	<!-- HP -->
+	<div class="sf box size-2 child-txt-center block">
+		<label class="sf box">Health</label>
+
+		<label class="sf box size-5">HD</label>
+		<input id="HD" type="text" class="sf box size-5" value="1">
+
+		<label class="sf box size-5">HP</label>
+		<input id="HP" type="text" class="sf box size-5" value="10">
+
+		<label class="sf box size-5">Max HP</label>
+		<input id="MaxHP" type="text" class="sf box size-5" value="10">
+	</div>
+	<!-- AC -->
+	<div class="sf box size-2 child-txt-center block">
+		<label class="sf box">AC</label>
+
+		<label class="sf box size-5">Normal</label>
+		<input type="text" class="sf box size-5" value="10">
+
+		<label class="sf box size-5">Flat</label>
+		<input type="text" class="sf box size-5" value="10">
+
+		<label class="sf box size-5">Touch</label>
+		<input type="text" class="sf box size-5" value="10">
+	</div>
+
+	<!-- Saves -->
+	<div class="sf box size-2 child-txt-center block">
+		<label class="sf box">Saves</label>
+
+		<label class="sf box size-5">Fort</label>
+		<input id="Fort" type="text" class="sf box size-5" value="0">
+
+		<label class="sf box size-5">Ref</label>
+		<input id="Ref" type="text" class="sf box size-5" value="0">
+
+		<label class="sf box size-5">Will</label>
+		<input id="Will" type="text" class="sf box size-5" value="0">
+	</div>
+
+	<!-- BAB -->
+	<div class="sf box size-2 child-txt-center block">
+		<label class="sf box size-5">BAB</label>
+		<input id="BAB" type="text" class="sf box size-5" value="0">
+	</div>
+	<script>
+bindInputMethod(Character,"HD");
+bindInputMethod(Character,"HP");
+bindInputMethod(Character,"MaxHP");
+
+bindInputMethod(Character,"Fort");
+bindInputMethod(Character,"Ref");
+bindInputMethod(Character,"Will");
+bindInputMethod(Character,"BAB");
+bindInput(Character, "LandSpeed");
+bindInput(Character, "SwimSpeed");
+bindInput(Character, "BurrowSpeed");
+bindInput(Character, "ClimbSpeed");
+bindInput(Character, "FlySpeed");
+bindInput(Character, "FlyAbility");
+	</script>
+
+</section>
+<!-- START TAB GROUP -->
+<div id="CharacterTabs" class="sf wrapper round block tab-group">
+<section class="sf wrapper tab-controls round block">
+	<button type="button" onclick="tabSwitch('CharacterTabs',1)" class="sf box button size-2 tab-button">Race and Traits</button>
+	<button type="button" onclick="tabSwitch('CharacterTabs',2)" class="sf box button size-2 tab-button">Class Features</button>
+	<button type="button" onclick="tabSwitch('CharacterTabs',3)" class="sf box button size-2 tab-button">Feats</button>
+	<button type="button" onclick="tabSwitch('CharacterTabs',4)" class="sf box button size-2 tab-button">Skills</button>
+	<button type="button" onclick="tabSwitch('CharacterTabs',5)" class="sf box button size-2 tab-button">Spells</button>
+</section>
+
+<section id="RaceTraits" class="sf wrapper round block">
+	<h2>Race and Traits</h2>
+</section>
+
+<section id="ClassFeatures" class="sf wrapper round block">
+	<h2>Class Features</h2>
+</section>
+
+<section id="Feats" class="sf wrapper round block">
+	<h2>Feats</h2>
+</section>
+
+<section id="Skills" class="sf wrapper round block">
+	<h2>Skills</h2>
+	<div class="sf box child-txt-center">
+		<label class="sf box size-2">Skill Points</label>
+		<input type="text" id="SkillPoints" class="sf box size-1">
+		<label class="sf box size-1">Used</label>
+		<input type="text" id="UsedSkillPoints" class="sf box size-1">
+		<button type="button" class="sf box size-3 button light" onclick="showSkillSelector(); $(this).children().toggle(0);">
+			<span>Add Skill</span>
+			<span style="display: none;">Cancel</span>
+		</button>
+	</div>
+	<div class="sf box child-txt-center" style="display: none;" id="AddSkillForm">
+		<label class="sf box size-4">Skill</label>
+		<label class="sf box size-4">Type/Variant</label>
+		<select class="sf box size-4" id="SkillList">
+		</select>
+		<input type="text" class="sf box size-4" id="SkillType">
+		<button type="button" class="sf box size-2 button end light" onclick="addSkill()">Confirm</button>
+	</div>
+	<div class="sf box child-txt-center">
+		<label class="sf box size-1">Class</label>
+		<label class="sf box size-3">Name</label>
+		<label class="sf box size-1">Ability</label>
+		<label class="sf box size-1">Mod</label>
+		<label class="sf box size-1">Ranks</label>
+	</div>
+	<!-- SKILLS -->
+
+	<script>
+	bindInputMethod(Character, "SkillPoints");
+	bindInputMethod(Character, "UsedSkillPoints");
+	GetSkillsHtml(Character.Skills);
+	</script>
+</section>
+
+<section id="Skills" class="sf wrapper round block">
+	<h2>Spells</h2>
+</section>
+
+<script>
+// Tabs
+	tabSwitch('CharacterTabs',4);
+</script>
+</div>
+<!-- END TAB GROUP -->
+</form>
+<section>
+<h2 onclick="var d = nextElementSibling;d.hidden = !d.hidden;">DEBUG</h2>
+<pre style="color: #20f020;font-family: monospace;" hidden>
+<?php
+var_dump($Character->Bonuses);
+//var_dump($Character->Skills);
+
+?>
+</pre>
+</section>
+</article>

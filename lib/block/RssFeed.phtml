@@ -1,0 +1,5 @@
+<?php
+if (!isset($Feed)) {
+    $Feed = RssFeed::LoadById($_POST['id']);
+}
+echo $Feed->ParseToHTML();

@@ -1,0 +1,58 @@
+<article>
+	<h1>Registration</h1>
+	<form action="/user/register" method="post">
+	<div class="sf wrapper dark round mb tooltip">
+		<label class="sf box size-2" for="e">Email</label>
+		<input class="sf box size-8" id="e" type="text" name="Email" required onchange="validateUnique(this)">
+		<div class="sf tooltip-text">Email must be valid and unique</div>
+	</div>
+	<div class="sf wrapper dark round mb tooltip">
+		<label class="sf box size-2" for="u">Username</label>
+		<input class="sf box size-8" id="u" type="text" name="Username" required onchange="validateUnique(this)">
+		<div class="sf tooltip-text">Username must start with a letter, contain only numbers and letters, be from 6 to 24 characters long, and has to be unique</div>
+	</div>	
+	<div class="sf wrapper dark round mb tooltip">
+		<label class="sf box size-2" for="p1">Password</label>
+		<input class="sf box size-3" id="p1"type="password" name="Password" required onchange="validatePassword()">
+		<label class="sf box size-2" for="p2">Verify</label>
+		<input class="sf box size-3" id="p2" type="password" name="PasswordVerify" required onchange="validatePassword()">
+		<div class="sf tooltip-text">Passwords have to match</div>
+	</div>
+	<div class="sf wrapper dark round mb">
+		<label class="sf box size-2">First Name</label>
+		<input class="sf box size-3" type="text" name="FirstName" required>
+		<label class="sf box size-2">Last Name</label>
+		<input class="sf box size-3" type="text" name="LastName" required>
+	</div>
+	<div class="sf wrapper dark round">
+		<input class="sf box button light" type="submit" value="Register">
+	</div>
+	</form>
+<script>
+function validateUnique(input) {
+	$.ajax({
+		type: 'GET',
+		url: '/user/verify/'+ input.name + '/' + input.value,
+		dataType: 'json',
+		success: function (data) {
+			markInput(input, data);
+		}
+	});
+}
+
+function validatePassword() {
+	var p1 = document.getElementById('p1');
+	var p2 = document.getElementById('p2');
+	markInput(p1, (p1.value == p2.value));
+	markInput(p2, (p1.value == p2.value));
+}
+function markInput(input, state) {
+	$(input.labels[0]).children().remove();
+	if (state) {
+		$(input.labels[0]).append('<div class="sf icon ok"></div>');
+	} else {
+		$(input.labels[0]).append('<div class="sf icon no"></div>');
+	}
+}
+</script>
+</article>

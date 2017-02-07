@@ -1,0 +1,62 @@
+<nav class="sf fixed-top box center round lightish">
+	<button class="sf box button edge orange size-8 start" onclick="$('nav > ul').toggle(400);">Menu</button>
+	<?php if (Auth::UserAuthenticated()) { ?>
+	<a class="sf box button edge orange size-2 end" href="/user/logout">Logout</a>
+	<?php } else { ?>
+	<button class="sf box button edge orange size-2 end" onclick="getBlock('LoginForm',renderFlyout);">Login</button>
+	<?php } ?>
+	<ul class="sf box wrapper hide">
+		<li class="sf box size-2">
+			<ul class="sf wrapper">
+				<li><a class="sf button size-full" href="/home/index/">Home</a></li>
+				<li><a class="sf button size-full" href="/home/motd/">MotD</a></li>
+				<li><a class="sf button size-full" href="/wall/index/">Wall</a></li>
+				<li><a class="sf button size-full" href="/home/quote/">Quotes</a></li>
+			</ul>
+		</li>
+		<li class="sf box size-2">
+			<ul class="sf wrapper">
+				<li><a class="sf button size-full" href="/media/pictures/">Pictures</a></li>
+				<li><a class="sf button size-full" href="/media/music/">Music</a></li>
+				<?php if (false && Auth::UserAuthenticated()) { ?>
+				<li><a class="sf button size-full" href="/media/jukebox/">Jukebox</a></li>
+				<?php } ?>
+				<li><a class="sf button size-full" href="/media/flash/">Flash</a></li>
+				<!--<li><a class="sf button size-full" href="/media/video/">Video</a></li>-->
+				<li><a class="sf button size-full" href="/media/files/">Files</a></li>
+				<?php if (Auth::UserAuthenticated()) { ?>
+				<li><a class="sf button size-full" href="/media/upload/">Upload</a></li>
+				<li><a class="sf button size-full" href="/media/convert/">Youtube</a></li>
+				<?php } ?>
+			</ul>
+		</li>
+		<li class="sf box size-2">
+			<ul class="sf wrapper">
+				<li><a class="sf button size-full" href="/pathfinder/character/1">PF: Character</a></li>
+				<li><a class="sf button size-full" href="/pathfinder/calculator/">PF: Calculators</a></li>
+				<li><a class="sf button size-full" href="/pathfinder/building/">PF: Buildings</a></li>
+			</ul>
+		</li>
+		<li class="sf box size-2">
+			<ul class="sf wrapper">
+				<?php if (Auth::UserAuthenticated()) { ?>
+				<li><a class="sf button size-full" href="/user/profile">My Profile</a></li>
+				<?php if (Auth::UserAuthorized(4)) { ?>
+				<li><a class="sf button size-full" href="/admin/index/">Admin Panel</a></li>
+				<?php } ?>
+				<li><a class="sf button size-full" href="/user/logout/">Logout</a></li>
+				<?php } else { ?>
+				<li><a class="sf button size-full" href="/user/login/">Login</a></li>
+				<li><a class="sf button size-full" href="/user/register/">Register</a></li>
+				<?php } ?>
+			</ul>
+		</li>
+		<li class="sf box size-2">
+			<ul class="sf wrapper">
+				<?php if (Auth::UserAuthenticated()) { ?>
+				<li><a class="sf button size-full" href="/notes/index">Notes</a></li>
+				<?php } ?>
+			</ul>
+		</li>
+	</ul>
+</nav>

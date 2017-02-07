@@ -1,0 +1,15 @@
+<article>
+<h1>Search</h1>
+<form class="FxRow" action="/wall/search/" method="post">
+	<input type="text" name="SearchString" class="FxBox Fx80" value="<?php echo $SearchString;?>">
+	<input type="submit" class="FxBox Fx20 FxButton" value="Search">
+</form>
+</article>
+<article>
+	<h1>Search Results</h1>
+<?php
+	foreach ($WallPosts as $Post) {
+		echo Html::GetBlock('WallPost',array('Post' => $Post));
+	}
+?>
+</article>

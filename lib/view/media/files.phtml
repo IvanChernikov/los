@@ -1,0 +1,12 @@
+<article>
+<h1>File List</h1>
+<?php foreach ($Files as $File) { ?>
+	<div class="sf wrapper edge dark">
+		<a href="<?php echo $File->GetUrl(); ?>" class="sf box lh32">
+			<img src="/css/img/ext_<?php echo $File->Type;?>_32x32.png" class="sf hw32">
+			<span><?php echo $File->Name ?></span>
+			<span class="sf box size-3 right txt-center"><?php echo $File->GetUploader()->Username; ?></span>
+		</a>
+	</div>
+<?php } ?>
+</article>

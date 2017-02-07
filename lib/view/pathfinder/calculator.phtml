@@ -1,0 +1,553 @@
+<script>
+var pointBuyScore = 0;
+var pointBuyArray = [];
+pointBuyArray[7] = -4;
+pointBuyArray[8] = -2;
+pointBuyArray[9] = -1;
+pointBuyArray[10] = 0;
+pointBuyArray[11] = 1;
+pointBuyArray[12] = 2;
+pointBuyArray[13] = 3;
+pointBuyArray[14] = 5;
+pointBuyArray[15] = 7;
+pointBuyArray[16] = 10;
+pointBuyArray[17] = 13;
+pointBuyArray[18] = 17;
+
+function n(numberString) {
+	return Number(numberString);
+}
+
+function Validate(input) {
+	if (n(input.value) > n(input.max)) {
+		input.value = n(input.max);
+	}
+	if (n(input.value) < n(input.min)) {
+		input.value = n(input.min);
+	}
+	UpdateTotal(input.parentElement);
+}
+
+function UpdateTotal(section) {
+	var score = n(section.getElementsByClassName("score")[0].value);
+	var racial = n(section.getElementsByClassName("racial")[0].value);
+	var total = section.getElementsByClassName("total")[0].value = score+racial;
+	section.getElementsByClassName("mod")[0].value = Math.floor((total-10)/2);
+	CalculateCost(section.parentElement);
+}
+
+function CalculateCost(form) {
+	var costInput = document.getElementById("totalCost");
+	var inputArray = form.getElementsByClassName("score");
+	var cost = 0;
+	for (var i = 0; i < inputArray.length; i++) {
+		cost += pointBuyArray[n(inputArray[i].value)]
+	}
+	costInput.value = cost;
+}
+function UpdateFCMax() {
+	document.getElementById('hdFC').max = n(document.getElementById("hdLevel").value);
+}
+function CalculateHP(form) {
+	var hd = n(document.getElementById("hdDie").value);
+	var level = n(document.getElementById("hdLevel").value);
+	var con = n(document.getElementById("hdCon").value);
+	var fc = n(document.getElementById("hdFC").value);
+	var toughness = document.getElementById("hdToughness").checked;
+	var total = 0;
+	
+	for (var i = 0; i < level; i++) {
+		// keep track of increment for a minimum 1hp/level
+		var increment = 0;
+		if (i == 0) {
+			increment += hd;
+		} else {
+			increment += (hd/2) + IsEven(i+1);
+		}
+		increment += con;
+		if (increment < 1) {
+			increment = 1;
+		}
+		total += increment;
+	}
+	// add favored class bonus
+	total += fc;
+	
+	if (toughness) {
+		if (level < 3) {
+			total += 3;
+		} else {
+			total += level;
+		}
+	}
+	document.getElementById("hdTotal").value = total;
+}
+function IsEven(number) {
+	if (number%2 == 0) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+function IsChecked(id) {
+	return document.getElementById(id).checked;
+}
+function GetMod(value) {
+	return Math.floor((n(value)-10)/2);
+}
+function GetNum(id) {
+	return n(document.getElementById(id).value)
+}
+
+function CalculateAttack() {
+	var bab = Math.floor(GetNum("adBAB")*GetNum("adLevel"));
+	var str = GetNum("adStr");
+	var dex = GetNum("adDex");
+	
+	var isDexDamage = IsChecked("adDexDamage");
+	var isDexAttack = IsChecked("adDexAttack");
+
+	var isRanged = IsChecked("adRanged");
+	var isMwk = IsChecked("adMWK");
+	var wepMult = GetNum("adMult");
+	var wepEnh = GetNum("adEnhancement");
+	
+	var isPA = IsChecked("adPA");
+	var isFF = IsChecked("adFF");
+
+	var hitBonus = 0;
+	var hitDamage = 0;
+	
+	if (isDexAttack || isRanged) {
+		hitBonus += GetMod(dex);
+	} else {
+		hitBonus += GetMod(str);
+	}
+	
+	if (isDexDamage) {
+		hitDamage += Math.floor(GetMod(dex) * wepMult);
+	} else {
+		if (isRanged) {
+			Math.low
+		} else {
+			hitDamage += Math.floor(GetMod(str) * wepMult);
+		}
+	}
+	
+	var paPenalty = (1 + Math.floor(bab/4));
+	var paBonus = Math.floor(paPenalty * 2 * wepMult);
+	
+	if  (isPA) {
+		hitBonus -= paPenalty;
+		hitDamage += paBonus;
+	}
+	
+	// Add enhancement bonus
+	if (isMwk && wepEnh == 0) {
+		hitBonus += 1;
+	} else if (wepEnh > 0) {
+		hitBonus += wepEnh;
+		hitDamage += wepEnh;
+	}
+	
+	var fullBab = bab+hitBonus; 
+	
+	
+	var numAttacks = Math.max(Math.ceil(bab/5),1);
+	var attackElem = document.getElementById("adAttack");
+	
+	attackElem.value = "";
+	for (var i = 0; i < numAttacks; i++) {
+		var increment = (fullBab-(i*5));
+		if (i > 0) {
+			attackElem.value += "/";
+		} else {
+			if (isPA && isFF) {
+				increment += paPenalty;
+			}
+		}
+		attackElem.value += "+" + increment;
+	}
+	
+	var damageElem = document.getElementById("adDamage");
+	damageElem.value = "+" + (hitDamage);
+}
+
+function checkPrerequisites(elem, preq) {
+	for(i in preq) {
+		var pelem = document.getElementById(preq[i]);
+		if (elem.checked) {
+			pelem.checked = true;
+		}
+		if (typeof pelem.onchange === 'function') {
+			pelem.onchange();
+		}
+	}
+}
+function checkWeaponFocus(elem) {
+	if (elem.checked) {
+		var wfoc = document.getElementById("adWFoc");
+		if (wfoc.selectedIndex < 1) {
+			wfoc.selectedIndex = 1;
+		}
+	}
+}
+
+function adValidateWeapon() {
+	var mwk = document.getElementById("adMWK");
+	var agile = document.getElementById("adAgile");
+	var enh = document.getElementById("adEnhancement");
+	var fin = document.getElementById("adFinessable");
+	if (agile.checked) {
+		enh.min = 1;
+		fin.checked = true;
+		fin.disabled = true;
+		if (n(enh.value) < 1) {
+			enh.value = 1;
+		}
+	} else {
+		enh.min = 0;
+		fin.disabled = false;
+	}
+	if (n(enh.value) != 0) {
+		mwk.checked = true;
+		mwk.disabled = true;
+	} else {
+		mwk.disabled = false;
+	}
+}
+
+function CalculateMulticlass(form) {
+	var poorFort = GetNum("mcPF");
+	var goodFort = GetNum("mcGF");
+	
+	var poorRef = GetNum("mcPR");
+	var goodRef = GetNum("mcGR");
+	
+	var poorWill = GetNum("mcPW");
+	var goodWill = GetNum("mcGW");
+	
+	var slowBab = GetNum("mcSB");
+	var medBab = GetNum("mcMB");
+	var fastBab = GetNum("mcFB");
+	
+	var fort = GetSave(poorFort,goodFort);
+	document.getElementById("mcFort").value = fort;
+	var ref = GetSave(poorRef,goodRef);
+	document.getElementById("mcRef").value = ref;
+	var will = GetSave(poorWill,goodWill);
+	document.getElementById("mcWill").value = will;
+	
+	var bab = Math.floor(slowBab*0.5+medBab*0.75+fastBab);
+	document.getElementById("mcBab").value = bab;
+}
+
+function GetSave(poor, good) {
+	var save = 0;
+	if (good > 0) {
+		save += 2;
+	}
+	save += (1/3)*poor + (1/2)*good;
+	return Math.floor(save);
+}
+
+
+</script>
+
+<article id="pointbuy" class="sf sheet round">
+	<h1>Point-Buy Calculator</h1>
+	<form action="javascript:void(0)" method="GET" class="sf box child-txt-center round block">
+		<div class="sf wrapper">
+			<label class="sf box size-2">Name</label>
+			<label class="sf box size-2">Score</label>
+			<label class="sf box size-2">Racial</label>
+			<label class="sf box size-2">Total</label>
+			<label class="sf box size-2">Modifier</label>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Strength</label>
+			<input tabindex="1" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="7" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Dexterity</label>
+			<input tabindex="2" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="8" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Constitution</label>
+			<input tabindex="3" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="9" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Intelligence</label>
+			<input tabindex="4" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="10" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Wisdom</label>
+			<input tabindex="5" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="11" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Charisma</label>
+			<input tabindex="6" type="number" class="sf box size-2 score" min="7" max="18" value="10" onchange="Validate(this)">
+			<input tabindex="12" type="number" class="sf box size-2 racial" min="-20" max="20" value="0" onchange="Validate(this)">
+			<input tabindex="-1" type="text" class="sf box size-2 total" value="10" readonly>
+			<input tabindex="-1" type="text" class="sf box size-2 mod" value="0" readonly>
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Total Cost</label>
+			<input tabindex="-1" type="text" class="sf box size-2" id="totalCost" value="0" readonly>
+		</div>
+	</form>
+</article>
+	
+<article id="hitdie" class="sf sheet round">
+	<h1>Average HP Calculator</h1>
+	<form action="javascript:void(0)" method="GET" onchange="CalculateHP(this)" class="sf box child-txt-center block round">
+		<div class="sf wrapper">
+			<label class="sf box size-2">Hit-Die</label>
+			<label class="sf box size-2">Level</label>
+			<label class="sf box size-2">CON Mod</label>
+			<label class="sf box size-2">Favored Class</label>
+			<label class="sf box size-2">Toughness</label>
+		</div>
+		<div class="sf wrapper">
+			<select id="hdDie" class="sf box size-2">
+				<option value="4">d4</option>
+				<option value="6">d6</option>
+				<option value="8">d8</option>
+				<option value="10">d10</option>
+				<option value="12">d12</option>
+			</select>
+			<input id="hdLevel" type="number" value="1" min="1" max="99" class="sf box size-2" onchange="UpdateFCMax()">
+			<input id="hdCon" type="number" value="0" min="-5" max="99" class="sf box size-2">
+			<input id="hdFC" type="number" value="0" min="0" max="1" class="sf box size-2">
+			<input id="hdToughness" type="checkbox" class="sf box size-2">
+		</div>
+		<div class="sf wrapper">
+			<label class="sf box size-2">Total</label>
+			<input id="hdTotal" type="text" value="4" readonly class="sf box size-2">
+		</div>
+	</form>
+</article>
+<article id="multiclass" class="sf sheet round">
+	<h1>Multi-classing Calculator</h1>
+	<form action="javascript:void(0)" method="GET" onchange="CalculateMulticlass(this)" class="sf box block round child-txt-center">
+		<section>
+			<h2 class="title">Class Levels</h2>
+			<div class="sf wrapper">
+				<label class="sf box size-1">Saves</label>
+				<label class="sf box size-2">Good Levels</label>
+				<label class="sf box size-2">Poor Levels</label>
+				<label class="sf box size-1">BAB</label>
+				<label class="sf box size-2">Levels</label>
+			</div>
+			
+			<div class="sf wrapper">
+				<label class="sf box size-1">Fortitude</label>
+				<input id="mcGF" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<input id="mcPF" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<label class="sf box size-1">Fast</label>
+				<input id="mcFB" type="number" min="0" max="20" value="0" class="sf box size-2">
+			</div>
+			
+			<div class="sf wrapper">
+				<label class="sf box size-1">Reflex</label>
+				<input id="mcGR" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<input id="mcPR" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<label class="sf box size-1">Medium</label>
+				<input id="mcMB" type="number" min="0" max="20" value="0" class="sf box size-2">
+			</div>
+			
+			<div class="sf wrapper">
+				<label class="sf box size-1">Willpower</label>
+				<input id="mcGW" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<input id="mcPW" type="number" min="0" max="20" value="0" class="sf box size-2">
+				<label class="sf box size-1">Slow</label>
+				<input id="mcSB" type="number" min="0" max="20" value="0" class="sf box size-2">
+			</div>
+		</section>		
+		<section>
+			<h2 class="title">Totals</h2>
+			<div class="sf wrapper">
+				<label class="sf box size-2">BAB</label>
+				<label class="sf box size-2">Fortitude Save</label>
+				<label class="sf box size-2">Reflex Save</label>
+				<label class="sf box size-2">Willpower Save</label>
+			</div>
+			<div class="sf wrapper">
+				<input id="mcBab" type="text" readonly class="sf box size-2">
+				<input id="mcFort" type="text" readonly class="sf box size-2">
+				<input id="mcRef" type="text" readonly class="sf box size-2">
+				<input id="mcWill" type="text" readonly class="sf box size-2">
+			</div>
+		</section>
+	</form>
+</article>
+<article id="damage" class="sf sheet round">
+	<h1>Attack Calculator</h1>
+	<form action="javascript:void(0)" method="GET" onchange="CalculateAttack(this)" class="sf box block round child-txt-center">
+		<section>
+			<h2 class="title">Character</h2>
+			
+			<div class="sf wrapper">
+				<label class="sf box size-2">Level</label>
+				<label class="sf box size-2">BAB</label>
+				<label class="sf box size-2">STR</label>
+				<label class="sf box size-2">DEX</label>
+				<label class="sf box size-2">Size</label>
+			</div>
+		
+			<div class="sf wrapper">
+				<input id="adLevel" type="number" min="1" max="20" value="1" class="sf box size-2">
+				<select id="adBAB" class="sf box size-2">
+					<option value="1" selected>Fast (&#215;1)</option>
+					<option value="0.75">Medium (&#215;&#190;)</option>
+					<option value="0.5">Slow (&#215;&#189;)</option>
+				</select>
+				<input id="adStr" type="number" min="0" max="99" value="10" class="sf box size-2">
+				<input id="adDex" type="number" min="0" max="99" value="10" class="sf box size-2">
+				<select id="adSize" class="sf box size-2">
+					<option value="8">Fine (+8)</option>
+					<option value="4">Diminutive (+4)</option>
+					<option value="2">Tiny (+2)</option>
+					<option value="1">Small (+1)</option>
+					<option value="0" selected>Medium (+0)</option>
+					<option value="-1">Large (-1)</option>
+					<option value="-2">Huge (-2)</option>
+					<option value="-4">Gargantuan (-4)</option>
+					<option value="-8">Colossal (-8)</option>
+				</select>
+			</div>
+		</section>
+		
+		<section>
+			<h2 class="title">Weapon</h2>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Finessable</label>
+				<label class="sf box size-2">Masterwork</label>
+				<label class="sf box size-2">Enhancement</label>
+				<label class="sf box size-2">Agile</label>
+				<label class="sf box size-2">Off-Hand Light</label>
+			</div>
+			<div class="sf wrapper">
+				<input id="adFinessable" type="checkbox" class="sf box size-2">
+				<input id="adMWK" type="checkbox" class="sf box size-2">
+				<input id="adEnhancement" type="number" min="0" max="5" value="0" class="sf box size-2" onchange="adValidateWeapon()">
+				<input id="adAgile" type="checkbox" class="sf box size-2" onchange="adValidateWeapon()">
+				<input id="adOffHand" type="checkbox" class="sf box size-2">
+			</div>
+		</section>
+		
+		<section>
+			<h2 class="title">Feats, Items, and Class Features</h2>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Two-Weapon Fighting</label>
+				<label class="sf box size-2"><abbr title="Improved Two-Weapon Fighting">Improved TWF</abbr></label>
+				<label class="sf box size-2"><abbr title="Greater Two-Weapon Fighting">Greater TWF</abbr></label>
+				<label class="sf box size-2">Double Slice</label>
+				<label class="sf box size-2">Weapon Focus</label>
+			</div>
+			<div class="sf wrapper">
+				<input id="adTWF" type="checkbox" class="sf box size-2">
+				<input id="adITWF" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adTWF'])">
+				<input id="adGTWF" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adITWF'])">
+				<input id="adDSl" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adTWF'])">
+				<select id="adWFoc" class="sf box size-2">
+					<option value="0" selected>None (+0)</option>
+					<option value="1">Normal (+1)</option>
+					<option value="2">Greater (+2)</option>
+				</select>
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Power Attack</label>
+				<label class="sf box size-2">Furious Focus</label>
+				<label class="sf box size-2"><abbr title="Two Handed Fighter Archetype, 3rd level">Overhand Chop</abbr></label>
+				<label class="sf box size-2"><abbr title="Two Handed Fighter Archetype, 7th level">Backswing</abbr></label>
+				<label class="sf box size-2"><abbr title="Two Handed Fighter Archetype, 15th level">Greater Power Attack</abbr></label>
+			</div>
+			<div class="sf wrapper">
+				<input id="adPA" type="checkbox" class="sf box size-2">
+				<input id="adFF" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adPA'])">
+				<input id="adOC" type="checkbox" class="sf box size-2">
+				<input id="adBS" type="checkbox" class="sf box size-2">
+				<input id="adGPA" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adPA'])">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Weapon Finesse</label>
+				<label class="sf box size-2"><abbr title="Unchained Rogue, 3rd level">Finesse Training</abbr></label>
+				<label class="sf box size-2">Piranha Strike</label>
+				<label class="sf box size-2">Slashing/Fencing Grace</label>
+				<label class="sf box size-2">Dervish Dance<label>
+			</div>
+			<div class="sf wrapper">
+				<input id="adWF" type="checkbox" class="sf box size-2">
+				<input id="adFT" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adWF'])">
+				<input id="adPS" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adWF'])">
+				<input id="adSFG" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adWF']); checkWeaponFocus(this);">
+				<input id="adDD" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adWF'])">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Point-Blank Shot</label>
+				<label class="sf box size-2">Rapid Shot</label>
+				<label class="sf box size-2">Manyshot</label>
+				<label class="sf box size-2">Deadly Aim</label>
+				<label class="sf box size-2">Gun Training</label>
+			</div>
+			<div class="sf wrapper">
+				<input id="adPBS" type="checkbox" class="sf box size-2">
+				<input id="adRS" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adPBS'])">
+				<input id="adMS" type="checkbox" class="sf box size-2" onchange="checkPrerequisites(this,['adRS'])">
+				<input id="adDA" type="checkbox" class="sf box size-2">
+				<input id="adGT" type="checkbox" class="sf box size-2">
+			</div>
+		</section>
+		
+		<section>
+			<h2 class="title">Results</h2>
+			<div class="sf wrapper ">
+				<label class="sf box size-2"></label>
+				<label class="sf box size-4">Attack</label>
+				<label class="sf box size-4">Damage</label>
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Melee One Hand</label>
+				<input id="adAttack" type="text" readonly class="sf box size-4">
+				<input id="adDamage" type="text" readonly class="sf box size-4">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Melee Two Handed</label>
+				<input id="ad2HAttack" type="text" readonly class="sf box size-4">
+				<input id="ad2HDamage" type="text" readonly class="sf box size-4">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Melee Two-Weapon</label>
+				<input id="ad2WAttack" type="text" readonly class="sf box size-4">
+				<input id="ad2WDamage" type="text" readonly class="sf box size-4">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Ranged Thrown</label>
+				<input id="adRTAttack" type="text" readonly class="sf box size-4">
+				<input id="adRTDamage" type="text" readonly class="sf box size-4">
+			</div>
+			<div class="sf wrapper">
+				<label class="sf box size-2">Ranged Projectile</label>
+				<input id="adRPAttack" type="text" readonly class="sf box size-4">
+				<input id="adRPDamage" type="text" readonly class="sf box size-4">
+			</div>
+		</section>
+	</form>
+</article>

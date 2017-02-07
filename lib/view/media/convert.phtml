@@ -1,0 +1,22 @@
+<article>
+	<h2>Youtube MP3 Converter</h2>
+	<form class="sf wrapper edge dark" method="POST" action="/media/convert">
+		<input type="hidden" name="ID" id="ID"/>
+		<label class="sf box size-2">URL:</label><input type="text" name="URL" id="URL"/ class="sf box size-8">
+		<div id="previewBox" class="sf box mt mb round edge light" style="height: 400px;"></div>
+		<div class="sf box size-5 tooltip edge round light start pa">
+			<input class="sf box" type="range" id="TimeFrom" onchange="UpdateRange(this,this.value)" onmousemove="UpdateTooltip(event)" min="0" step="1">
+			<div class="sf tooltip-text" id="TooltipFrom"></div>
+		</div>
+		<div class="sf box size-5 tooltip edge round light end pa">
+			<input class="sf box" type="range" id="TimeTo" onchange="UpdateRange(this,this.value)" onmousemove="UpdateTooltip(event)" min="1" step="1">
+			<div class="sf tooltip-text" id="TooltipTo"></div>
+		</div>
+		<label class="sf box size-2">From:</label><input type="text" class="sf box size-3" name="StartTime" id="StartTime">
+		<label class="sf box size-2">From:</label><input type="text" class="sf box size-3" name="EndTime" id="EndTime">
+		<label class="sf box size-2">Title:</label><input type="text" name="Title" id="Title"/ class="sf box size-8">
+		<label class="sf box size-2">Artist:</label><input type="text" name="Artist" id="Artist"/ class="sf box size-8">
+		<label class="sf box size-2">Description:</label><textarea name="Description" id="Description"/ class="sf box size-8" style="min-height: 300px; max-width: 80%;"></textarea>
+		<button type="submit" class="sf box button">Convert</button>
+	</form>
+</article>

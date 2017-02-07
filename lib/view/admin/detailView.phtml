@@ -1,0 +1,12 @@
+<article>
+<?php if (isset($Model)) { ?>
+    <h2>Editing: <?php echo $Meta->ClassName . ' #' . $Instance->ID; ?>  </h2>
+    <div class="sf wrapper data">
+        <?php Html::GetBlock('DetailView',array(
+                                'Meta' => $Meta,
+								'Instance' => $Instance
+                            )); ?>
+    </div>
+
+<?php } ?>
+</article>
